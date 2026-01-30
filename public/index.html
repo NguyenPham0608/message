@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positivity Wall</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Positivity Wall</h1>
+            <p>Leave a positive message for the world.</p>
+        </header>
+
+        <main>
+            <div class="card input-card">
+                <form id="messageForm">
+                    <div class="input-group">
+                        <input type="text" id="nameInput" placeholder="Name (Optional)" maxlength="30">
+                    </div>
+                    <div class="input-group">
+                        <textarea id="messageInput" placeholder="Type something nice..." rows="3" maxlength="200" required></textarea>
+                        <div id="validationMessage" class="validation-msg"></div>
+                    </div>
+                    <button type="submit" id="sendBtn" disabled>Send Positivity</button>
+                </form>
+            </div>
+
+            <div class="feed-container">
+                <h2>Recent Vibes</h2>
+                <div id="messageFeed" class="message-feed">
+                    <!-- Messages will be injected here -->
+                    <div class="loading">Loading messages...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
