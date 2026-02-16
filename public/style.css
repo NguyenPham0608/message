@@ -271,8 +271,8 @@ select option {
 #sendBtn:disabled {
     opacity: 0.35;
     cursor: not-allowed;
-    background-color: rgba(0, 0, 0, 0);
-    border: 2px solid rgb(51, 146, 0);
+    background-color: rgba(255, 255, 255, 0.066);
+    border: none;
 }
 
 /* ── Feed Section ────────────────────────────────── */
