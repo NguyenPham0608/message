@@ -235,25 +235,28 @@ select option {
     font-weight: 600;
     letter-spacing: 0.02em;
     color: #fff;
-    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #818cf8 100%);
+    background-color: rgba(0, 131, 22, 0.445);
+    border: 2px solid rgb(169, 255, 123);
     cursor: pointer;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    transition: all 0.25s ease;
     z-index: 1;
+
 }
 
 #sendBtn .btn-glow {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 #sendBtn:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.15);
+    background-color: rgb(18, 219, 0);
+    border: 2px solid rgb(18, 219, 0);
 }
 
 #sendBtn:hover:not(:disabled) .btn-glow {
@@ -268,7 +271,8 @@ select option {
 #sendBtn:disabled {
     opacity: 0.35;
     cursor: not-allowed;
-    background: linear-gradient(135deg, #4b4b6b 0%, #3b3b5c 100%);
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid rgb(51, 146, 0);
 }
 
 /* ── Feed Section ────────────────────────────────── */

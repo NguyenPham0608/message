@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.forEach(msg => addMessageToFeed(msg));
             })
             .catch(() => {
-                messageFeed.innerHTML = '<div class="loading">Failed to load messages.</div>';
+                messageFeed.innerHTML = '<div class="loading"></div>';
             });
     }
 
@@ -96,26 +96,26 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         })
-        .then(async r => {
-            if (!r.ok) throw new Error((await r.json()).error || 'Something went wrong');
-            return r.json();
-        })
-        .then(() => {
-            inputPanel.classList.add('success');
-            setTimeout(() => inputPanel.classList.remove('success'), 700);
+            .then(async r => {
+                if (!r.ok) throw new Error((await r.json()).error || 'Something went wrong');
+                return r.json();
+            })
+            .then(() => {
+                inputPanel.classList.add('success');
+                setTimeout(() => inputPanel.classList.remove('success'), 700);
 
-            nameInput.value = '';
-            gradeInput.value = '';
-            messageInput.value = '';
-            validateForm();
-            loadMessages();
-            btnText.textContent = 'Submit';
-        })
-        .catch(err => {
-            alert(err.message);
-            sendBtn.disabled = false;
-            btnText.textContent = 'Submit';
-        });
+                nameInput.value = '';
+                gradeInput.value = '';
+                messageInput.value = '';
+                validateForm();
+                loadMessages();
+                btnText.textContent = 'Submit';
+            })
+            .catch(err => {
+                alert(err.message);
+                sendBtn.disabled = false;
+                btnText.textContent = 'Submit';
+            });
     });
 
     /* ─── Init ───────────────────────────────────────────── */
