@@ -39,7 +39,7 @@ body {
     background: url("images.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center
+    background-position: center;
 }
 
 /* ── Hidden SVG ──────────────────────────────────── */
@@ -81,7 +81,7 @@ header h1 {
     font-size: 2.8rem;
     font-weight: 700;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #e0e7ff 0%, #c4b5fd 40%, #a78bfa 70%, #818cf8 100%);
+    background: linear-gradient(135deg, #0056d8 0%, #0f004a 40%, #2a00aa 70%, #3e4377 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -96,7 +96,7 @@ header p {
 }
 
 /* ══════════════════════════════════════════════════
-   GLASS PANEL — real distortion via cloned background
+   GLASS PANEL — frosted glass via backdrop-filter
    ══════════════════════════════════════════════════ */
 .glass-panel {
     position: relative;
@@ -104,45 +104,9 @@ header p {
     padding: 2rem;
     margin-bottom: 2.5rem;
     overflow: hidden;
-    background: var(--glass-bg);
-}
-
-/* — Distorted background layer (JS injects this) — */
-.glass-bg-layer {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    z-index: 0;
-    /* overflow NOT hidden here — the SVG filter needs access to
-       pixels just outside the panel bounds for edge displacement.
-       .glass-panel's overflow:hidden does the final clipping. */
-}
-
-/* Viewport-sized div that carries the same background image as the body,
-   offset by JS so it aligns pixel-for-pixel, then warped by the SVG
-   displacement filter. This is REAL distortion — not blur. */
-.glass-bg-clone {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: url("images.jpeg") center / cover no-repeat;
-    /* filter is set per-panel by JS via inline style */
-    pointer-events: none;
-    will-change: transform;
-}
-
-/* Dark tint over the distorted bg so text stays readable.
-   Separate element (not inside .glass-bg-layer) so the
-   SVG displacement filter doesn't warp it. */
-.glass-bg-tint {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: rgba(8, 8, 14, 0.5);
-    pointer-events: none;
-    z-index: 1;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }
 
 /* — Gradient border (mask trick for rounded corners) — */
@@ -226,7 +190,7 @@ select {
 
 input::placeholder,
 textarea::placeholder {
-    color: var(--text-dim);
+    color: var(--text-secondary);
 }
 
 input:focus,
@@ -323,23 +287,18 @@ select option {
 }
 
 /* ══════════════════════════════════════════════════
-   MESSAGE CARD — also gets real distortion via clone
+   MESSAGE CARD — frosted glass
    ══════════════════════════════════════════════════ */
 .message-card {
     position: relative;
     padding: 1.1rem 1.25rem;
     border-radius: var(--radius-sm);
     overflow: hidden;
-    background: var(--glass-bg);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
-/* Distorted background for message cards (injected by JS) */
-.message-card .glass-bg-layer {
-    border-radius: inherit;
-}
-
-/* message card glass-bg-clone filter is set by JS */
 
 /* Gradient border */
 .message-card::before {
@@ -362,6 +321,25 @@ select option {
     mask-composite: exclude;
     pointer-events: none;
     z-index: 2;
+}
+
+/* Mouse-following specular highlight for message cards */
+.message-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(255, 255, 255, 0.08),
+            transparent);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.message-card:hover::after {
+    opacity: 1;
 }
 
 .message-card:hover {
