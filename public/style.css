@@ -7,12 +7,12 @@
     --glass-border-bottom: rgba(255, 255, 255, 0.02);
     --text: #e5e7eb;
     --text-secondary: #9ca3af;
-    --text-dim: #6b7280;
-    --accent: #a78bfa;
+    --text-dim: #ffffff;
+    --accent: #001462;
     --accent-subtle: rgba(167, 139, 250, 0.08);
     --input-bg: rgba(255, 255, 255, 0.04);
     --input-border: rgba(255, 255, 255, 0.08);
-    --input-focus: rgba(167, 139, 250, 0.4);
+    --input-focus: rgba(0, 20, 122, 0.4);
     --radius: 20px;
     --radius-sm: 12px;
     --radius-xs: 8px;
