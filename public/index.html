@@ -3,43 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Positivity Wall</title>
+    <meta name="theme-color" content="#08080c">
+    <title>Message Board</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+
+    <!-- SVG filters — glass displacement filters are created dynamically by JS -->
+    <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg">
+        <defs id="svgDefs">
+            <!-- Noise grain texture -->
+            <filter id="noise-filter" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" result="noise" />
+                <feColorMatrix in="noise" type="saturate" values="0" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Noise overlay -->
+    <div class="noise-overlay"></div>
 
     <div class="container">
         <header>
-            <h1>Positivity Wall</h1>
-            <p>Leave a positive message for the world.</p>
+            <h1>Message Board</h1>
+            <p>Leave your name, grade level, and a message.</p>
         </header>
 
         <main>
-            <div class="card input-card">
-                <form id="messageForm">
-                    <div class="input-group">
-                        <input type="text" id="nameInput" placeholder="Name (Optional)" maxlength="30">
-                    </div>
-                    <div class="input-group">
-                        <textarea id="messageInput" placeholder="Type something nice..." rows="3" maxlength="200" required></textarea>
-                        <div id="validationMessage" class="validation-msg"></div>
-                    </div>
-                    <button type="submit" id="sendBtn" disabled>Send Positivity</button>
-                </form>
+            <div class="glass-panel input-panel">
+                <!-- JS injects .glass-bg-layer here for real distortion -->
+                <div class="glass-content">
+                    <form id="messageForm">
+                        <div class="input-group">
+                            <label for="nameInput">Name</label>
+                            <input type="text" id="nameInput" placeholder="Your name" maxlength="30" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="gradeInput">Grade Level</label>
+                            <select id="gradeInput" required>
+                                <option value="" disabled selected>Select your grade</option>
+                                <option value="6">6th Grade</option>
+                                <option value="7">7th Grade</option>
+                                <option value="8">8th Grade</option>
+                                <option value="9">9th Grade</option>
+                                <option value="10">10th Grade</option>
+                                <option value="11">11th Grade</option>
+                                <option value="12">12th Grade</option>
+                                <option value="College">College</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="messageInput">Message</label>
+                            <textarea id="messageInput" placeholder="Write your message..." rows="3" maxlength="500" required></textarea>
+                        </div>
+                        <button type="submit" id="sendBtn" disabled>
+                            <span class="btn-text">Submit</span>
+                            <span class="btn-glow"></span>
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <div class="feed-container">
-                <h2>Recent Vibes</h2>
+            <div class="feed-section">
+                <h2>Recent Messages</h2>
                 <div id="messageFeed" class="message-feed">
-                    <!-- Messages will be injected here -->
                     <div class="loading">Loading messages...</div>
                 </div>
             </div>

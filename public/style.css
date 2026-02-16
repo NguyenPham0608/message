@@ -1,223 +1,513 @@
+/* ── Color Tokens ─────────────────────────────────── */
 :root {
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --text-color: #1f2937;
-    --text-light: #6b7280;
-    --bg-color: #f3f4f6;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.5);
-    --error-color: #ef4444;
-    --success-color: #10b981;
+    --bg: #08080c;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border-top: rgba(255, 255, 255, 0.15);
+    --glass-border-side: rgba(255, 255, 255, 0.06);
+    --glass-border-bottom: rgba(255, 255, 255, 0.02);
+    --text: #e5e7eb;
+    --text-secondary: #9ca3af;
+    --text-dim: #6b7280;
+    --accent: #a78bfa;
+    --accent-subtle: rgba(167, 139, 250, 0.08);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-border: rgba(255, 255, 255, 0.08);
+    --input-focus: rgba(167, 139, 250, 0.4);
+    --radius: 20px;
+    --radius-sm: 12px;
+    --radius-xs: 8px;
 }
 
-* {
+/* ── Reset ───────────────────────────────────────── */
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* ── Body ────────────────────────────────────────── */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    background: url("images.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center
 }
 
-/* Dynamic Background */
-.background-blobs {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
+/* ── Hidden SVG ──────────────────────────────────── */
+.svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
     overflow: hidden;
 }
 
-.blob {
-    position: absolute;
-    filter: blur(80px);
-    opacity: 0.6;
-    animation: move 20s infinite alternate;
+/* ── Noise Overlay ───────────────────────────────── */
+.noise-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.035;
+    filter: url(#noise-filter);
+    width: 100%;
+    height: 100%;
 }
 
-.blob-1 {
-    top: -10%;
-    left: -10%;
-    width: 50vw;
-    height: 50vw;
-    background: #c084fc;
-    animation-delay: 0s;
-}
-
-.blob-2 {
-    bottom: -10%;
-    right: -10%;
-    width: 60vw;
-    height: 60vw;
-    background: #818cf8;
-    animation-delay: -5s;
-}
-
-.blob-3 {
-    top: 40%;
-    left: 40%;
-    width: 40vw;
-    height: 40vw;
-    background: #f472b6;
-    animation-delay: -10s;
-}
-
-@keyframes move {
-    from { transform: translate(0, 0) scale(1); }
-    to { transform: translate(50px, -50px) scale(1.1); }
-}
-
+/* ── Container ───────────────────────────────────── */
 .container {
     width: 100%;
-    max-width: 600px;
-    padding: 2rem 1rem;
-    z-index: 1;
+    max-width: 620px;
+    padding: 2.5rem 1rem 4rem;
+    z-index: 2;
+    position: relative;
 }
 
+/* ── Header ──────────────────────────────────────── */
 header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c4b5fd 40%, #a78bfa 70%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 0.5rem;
-    color: #3730a3;
 }
 
 header p {
-    color: var(--text-light);
-}
-
-.card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-
-.input-group {
-    margin-bottom: 1rem;
-}
-
-input, textarea {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 8px;
-    font-family: inherit;
+    color: var(--text-secondary);
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    transition: all 0.3s ease;
+    font-weight: 300;
+    letter-spacing: 0.01em;
 }
 
-input:focus, textarea:focus {
+/* ══════════════════════════════════════════════════
+   GLASS PANEL — real distortion via cloned background
+   ══════════════════════════════════════════════════ */
+.glass-panel {
+    position: relative;
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    overflow: hidden;
+    background: var(--glass-bg);
+}
+
+/* — Distorted background layer (JS injects this) — */
+.glass-bg-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 0;
+    /* overflow NOT hidden here — the SVG filter needs access to
+       pixels just outside the panel bounds for edge displacement.
+       .glass-panel's overflow:hidden does the final clipping. */
+}
+
+/* Viewport-sized div that carries the same background image as the body,
+   offset by JS so it aligns pixel-for-pixel, then warped by the SVG
+   displacement filter. This is REAL distortion — not blur. */
+.glass-bg-clone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url("images.jpeg") center / cover no-repeat;
+    /* filter is set per-panel by JS via inline style */
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Dark tint over the distorted bg so text stays readable.
+   Separate element (not inside .glass-bg-layer) so the
+   SVG displacement filter doesn't warp it. */
+.glass-bg-tint {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: rgba(8, 8, 14, 0.5);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* — Gradient border (mask trick for rounded corners) — */
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(170deg,
+            var(--glass-border-top) 0%,
+            var(--glass-border-side) 40%,
+            var(--glass-border-bottom) 100%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* — Mouse-following specular highlight — */
+.glass-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle 280px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(255, 255, 255, 0.07),
+            transparent);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.glass-panel:hover::after {
+    opacity: 1;
+}
+
+/* — Content wrapper sits above all glass layers — */
+.glass-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* ── Form Elements ───────────────────────────────── */
+.input-group {
+    margin-bottom: 1.25rem;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 0.45rem;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-xs);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text);
+    background: var(--input-bg);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-dim);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--input-focus), 0 0 20px rgba(167, 139, 250, 0.08);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 textarea {
     resize: vertical;
-    min-height: 80px;
+    min-height: 88px;
+    line-height: 1.5;
 }
 
-button {
-    width: 100%;
-    padding: 0.8rem;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
+select {
     cursor: pointer;
-    transition: background-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M4.646 5.646a.5.5 0 0 1 .708 0L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 16px;
+    padding-right: 2.5rem;
 }
 
-button:hover:not(:disabled) {
-    background-color: var(--primary-hover);
+select option {
+    background: #1a1a2e;
+    color: var(--text);
 }
 
-button:disabled {
-    background-color: #a5b4fc;
+/* ── Submit Button ───────────────────────────────── */
+#sendBtn {
+    position: relative;
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: var(--radius-xs);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #fff;
+    background: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #818cf8 100%);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    z-index: 1;
+}
+
+#sendBtn .btn-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#sendBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.15);
+}
+
+#sendBtn:hover:not(:disabled) .btn-glow {
+    opacity: 1;
+}
+
+#sendBtn:active:not(:disabled) {
+    transform: translateY(0) scale(0.985);
+    box-shadow: 0 2px 10px rgba(124, 58, 237, 0.3);
+}
+
+#sendBtn:disabled {
+    opacity: 0.35;
     cursor: not-allowed;
+    background: linear-gradient(135deg, #4b4b6b 0%, #3b3b5c 100%);
 }
 
-.validation-msg {
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    height: 1.25rem; /* prevent layout shift */
-    color: var(--error-color);
-    font-weight: 500;
-}
-
-.feed-container h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #3730a3;
+/* ── Feed Section ────────────────────────────────── */
+.feed-section h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 1.25rem;
 }
 
 .message-feed {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.85rem;
 }
 
+/* ══════════════════════════════════════════════════
+   MESSAGE CARD — also gets real distortion via clone
+   ══════════════════════════════════════════════════ */
 .message-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    padding: 1rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    animation: slideIn 0.4s ease-out;
+    position: relative;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--glass-bg);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Distorted background for message cards (injected by JS) */
+.message-card .glass-bg-layer {
+    border-radius: inherit;
+}
+
+/* message card glass-bg-clone filter is set by JS */
+
+/* Gradient border */
+.message-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(170deg,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.03) 50%,
+            rgba(255, 255, 255, 0.01) 100%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.message-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Message card content must be above the glass layer */
+.msg-content {
+    position: relative;
+    z-index: 1;
 }
 
 .msg-header {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 0.65rem;
     margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
 }
 
 .msg-name {
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--accent);
+}
+
+.msg-grade {
+    background: var(--accent-subtle);
+    color: var(--accent);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(167, 139, 250, 0.12);
 }
 
 .msg-time {
-    color: var(--text-light);
+    color: var(--text-dim);
+    font-size: 0.78rem;
+    margin-left: auto;
 }
 
 .msg-body {
-    line-height: 1.5;
-    color: var(--text-color);
+    line-height: 1.55;
+    color: var(--text-secondary);
     word-wrap: break-word;
+    font-size: 0.92rem;
 }
 
+/* ── Loading State ───────────────────────────────── */
 .loading {
     text-align: center;
-    color: var(--text-light);
-    padding: 1rem;
+    color: var(--text-dim);
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* ── Animations ──────────────────────────────────── */
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.message-card {
+    animation: cardEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.message-card:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.message-card:nth-child(2) {
+    animation-delay: 0.04s;
+}
+
+.message-card:nth-child(3) {
+    animation-delay: 0.08s;
+}
+
+.message-card:nth-child(4) {
+    animation-delay: 0.12s;
+}
+
+.message-card:nth-child(5) {
+    animation-delay: 0.16s;
+}
+
+.message-card:nth-child(6) {
+    animation-delay: 0.2s;
+}
+
+.message-card:nth-child(7) {
+    animation-delay: 0.24s;
+}
+
+.message-card:nth-child(8) {
+    animation-delay: 0.28s;
+}
+
+.message-card:nth-child(9) {
+    animation-delay: 0.32s;
+}
+
+.message-card:nth-child(10) {
+    animation-delay: 0.36s;
+}
+
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.glass-panel.success {
+    animation: successPulse 0.6s ease-out;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 480px) {
+    .container {
+        padding: 1.5rem 0.75rem 3rem;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .glass-panel {
+        padding: 1.5rem;
+        border-radius: 16px;
+    }
 }
